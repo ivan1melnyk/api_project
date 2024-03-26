@@ -1,5 +1,6 @@
 from typing import List
-from datetime import datetime, timedelta
+import datetime
+from datetime import date, timedelta
 
 from sqlalchemy.orm import Session
 
@@ -17,14 +18,13 @@ async def get_contact(contact_id: int, db: Session) -> Contact:
 
 async def birthdays_on_this_week(db: Session) -> List[Contact]:
     contacts = db.query(Contact).all()
-    print('@##Contacrts:', contacts)
-    today = datetime.today()
+    today = datetime.date.today()
     weekend = today + timedelta(days=7)
     birthday_list = list()
     for contact in contacts:
-        if today < contact.bithday and contact.birthday < weekend:
+        if today < contact.birthday and contact.birthday < weekend:
             birthday_list.append(contact)
-    return birthday_list
+    return contacts
 
 
 async def create_contact(body: ContactModel, db: Session) -> Contact:

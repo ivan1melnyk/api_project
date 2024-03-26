@@ -12,8 +12,8 @@ router = APIRouter(prefix='/contact')
 
 @router.get("/", response_model=List[ContactResponse])
 async def read_contact(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    contact = await repository_contact.get_contacts(skip, limit, db)
-    return contact
+    contacts = await repository_contact.get_contacts(skip, limit, db)
+    return contacts
 
 
 @router.get("/{contact_id}", response_model=ContactResponse)
@@ -23,11 +23,6 @@ async def read_contact(contact_id: int, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="contact not found")
     return contact
-
-
-@router.get("/birthdays_on_this_week", response_model=List[ContactResponse])
-async def birthdays_on_this_week(db: Session = Depends(get_db)):
-    return await repository_contact.birthdays_on_this_week(db)
 
 
 @router.post("/", response_model=ContactResponse)
