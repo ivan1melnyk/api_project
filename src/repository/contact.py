@@ -3,6 +3,7 @@ import datetime
 from datetime import date, timedelta
 
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 
 from src.database.models import Contact
 from src.schemas import ContactModel
@@ -16,15 +17,30 @@ async def get_contact(contact_id: int, db: Session) -> Contact:
     return db.query(Contact).filter(Contact.id == contact_id).first()
 
 
-async def birthdays_on_this_week(db: Session) -> List[Contact]:
-    contacts = db.query(Contact).all()
-    today = datetime.date.today()
-    weekend = today + timedelta(days=7)
-    birthday_list = list()
-    for contact in contacts:
-        if today < contact.birthday and contact.birthday < weekend:
-            birthday_list.append(contact)
+async def search(search: str, db: Session) -> Contact:
+    contacts = db.query(Contact).filter(
+        or_(
+            Contact.first_name.like(f"%{search}%"),
+            Contact.last_name.like(f"%{search}%"),
+            Contact.email.like(f"%{search}%")
+        )
+    ).all()
+
     return contacts
+
+
+async def get_contacts_birthdays(skip: int, limit: int, db: Session):
+    contacts_with_birthdays = []
+    today = date.today()
+    current_year = today.year
+    contacts = db.query(Contact).offset(skip).limit(limit).all()
+    for contact in contacts:
+        td = contact.birthday.replace(year=current_year) - today
+        if 0 <= td.days <= 7:
+            contacts_with_birthdays.append(contact)
+        else:
+            continue
+    return contacts_with_birthdays
 
 
 async def create_contact(body: ContactModel, db: Session) -> Contact:

@@ -25,6 +25,15 @@ async def read_contact(contact_id: int, db: Session = Depends(get_db)):
     return contact
 
 
+@router.get('/search', response_model=ContactResponse)
+async def search_contact(search: str = None, db: Session = Depends(get_db)):
+    contact = await repository_contact.search(search, db)
+    if contact is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="contact not found")
+    return contact
+
+
 @router.post("/", response_model=ContactResponse)
 async def create_contact(body: ContactModel, db: Session = Depends(get_db)):
     return await repository_contact.create_contact(body, db)
