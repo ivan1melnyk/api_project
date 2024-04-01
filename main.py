@@ -5,11 +5,14 @@ from src.database.db import get_db
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, Depends, status, Query
 from fastapi import FastAPI
+import uvicorn
 
-from src.routes import contact
+from src.routes import contact, auth
 
 app = FastAPI()
 
+
+app.include_router(auth.router, prefix='/api')
 app.include_router(contact.router, prefix='/api')
 
 
@@ -25,3 +28,7 @@ async def get_birthdays(skip: int = 0, limit: int = Query(default=10), db: Sessi
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Contacts with birthdays for the next 7 days not found")
     return contacts
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
