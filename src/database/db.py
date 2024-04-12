@@ -1,9 +1,8 @@
-from conf.config import settings
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-import sys
-sys.path.insert('C:/Users/User/Documents/GitHub/api_project/src/conf/config')
+from conf.config import settings
 
 SQLALCHEMY_DATABASE_URL = settings.sqlalchemy_database_url
 engine = create_engine(SQLALCHEMY_DATABASE_URL)

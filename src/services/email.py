@@ -6,6 +6,12 @@ from pydantic import EmailStr
 
 from src.services.auth import auth_service
 from conf.config import settings
+from pydantic import EmailStr, BaseModel
+
+
+class EmailSchema(BaseModel):
+    email: EmailStr
+    
 
 conf = ConnectionConfig(
     MAIL_USERNAME=settings.mail_username,

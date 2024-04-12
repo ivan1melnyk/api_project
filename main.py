@@ -8,31 +8,11 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from src.routes import contact, auth, users
 
-from pathlib import Path
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
-from pydantic import EmailStr, BaseModel
 from src.conf.config import settings
 from fastapi_limiter import FastAPILimiter
 import redis
 
 
-class EmailSchema(BaseModel):
-    email: EmailStr
-
-
-conf = ConnectionConfig(
-    MAIL_USERNAME="example@meta.ua",
-    MAIL_PASSWORD="fiz4R.A",
-    MAIL_FROM="example@meta.ua",
-    MAIL_PORT=465,
-    MAIL_SERVER="smtp.meta.ua",
-    MAIL_FROM_NAME="Example email",
-    MAIL_STARTTLS=False,
-    MAIL_SSL_TLS=True,
-    USE_CREDENTIALS=True,
-    VALIDATE_CERTS=True,
-    TEMPLATE_FOLDER=Path(__file__).parent / 'templates',
-)
 
 app = FastAPI()
 
@@ -76,22 +56,6 @@ async def get_birthdays(skip: int = 0, limit: int = Query(default=10), db: Sessi
                             detail="Contacts with birthdays for the next 7 days not found")
     return contacts
 
-
-@app.post("/send-email")
-async def send_in_background(background_tasks: BackgroundTasks, body: EmailSchema):
-    message = MessageSchema(
-        subject="Fastapi mail module",
-        recipients=[body.email],
-        template_body={"fullname": "Billy Jones"},
-        subtype=MessageType.html
-    )
-
-    fm = FastMail(conf)
-
-    background_tasks.add_task(fm.send_message, message,
-                              template_name="example_email.html")
-
-    return {"message": "email has been sent"}
 
 
 if __name__ == "__main__":
