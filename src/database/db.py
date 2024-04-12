@@ -2,6 +2,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+import sys
+sys.path.append(r'C:\Users\2E\Documents\GitRepositories\api_project\src')
+
 from conf.config import settings
 
 SQLALCHEMY_DATABASE_URL = settings.sqlalchemy_database_url
