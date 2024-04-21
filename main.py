@@ -13,9 +13,7 @@ from fastapi_limiter import FastAPILimiter
 import redis
 
 
-
 app = FastAPI()
-
 
 origins = [
     "http://localhost:3000"
@@ -55,7 +53,6 @@ async def get_birthdays(skip: int = 0, limit: int = Query(default=10), db: Sessi
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Contacts with birthdays for the next 7 days not found")
     return contacts
-
 
 
 if __name__ == "__main__":

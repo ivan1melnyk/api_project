@@ -2,8 +2,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-import sys
-sys.path.append(r'C:\Users\2E\Documents\GitRepositories\api_project\src')
+import sys 
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from conf.config import settings
 

@@ -1,6 +1,6 @@
 from datetime import datetime, date
 from typing import List, Optional
-from pydantic import BaseModel, Field, EmailStr, Extra
+from pydantic import BaseModel, Field, EmailStr, Extra, ValidationError
 
 
 class ContactBase(BaseModel):
@@ -11,8 +11,7 @@ class ContactBase(BaseModel):
 class ContactModel(ContactBase):
     email: str = Field(max_length=50)
     number: str = Field(max_length=15)
-    birthday: date
-    description: str = Field(max_length=150)
+    user_id: int
 
 
 class ContactUpdate(ContactModel):
@@ -20,7 +19,6 @@ class ContactUpdate(ContactModel):
     number: str = Field(max_length=15)
     birthday: date
     description: str = Field(max_length=150)
-
 
 class ContactResponse(ContactModel):
     id: int

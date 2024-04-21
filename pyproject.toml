@@ -23,7 +23,12 @@ cloudinary = "^1.39.1"
 conf = "^0.4.1"
 config = "^0.5.1"
 pydantic-settings = "^2.2.1"
+sphinx = "^7.3.7"
+pytest = "^8.1.1"
 
+
+[tool.poetry.group.dev.dependencies]
+sphinx = "^7.3.7"
 
 [build-system]
 requires = ["poetry-core"]

@@ -16,7 +16,7 @@ router = APIRouter(prefix='/contact', tags=["contact"])
 
 
 @router.get("/", response_model=List[ContactResponse], description='No more than 10 requests per minute', dependencies=[Depends(RateLimiter(times=10, seconds=60))])
-async def read_notes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+async def read_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
     contact = await repository_contact.get_contact(skip, limit, current_user, db)
     return contact
 
